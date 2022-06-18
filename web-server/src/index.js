@@ -3,10 +3,12 @@ const fs = require('fs')
 const path = require('path')
 const app = express()
 
-if(!process.env.port)
+console.log('process.env.port :', process.env.PORT)
+
+if(!process.env.PORT)
     throw new Error("Please set the environment variable PORT...")
 
-const port = process.env.port
+const port = process.env.PORT
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
