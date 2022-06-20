@@ -2,9 +2,22 @@ const express = require('express')
 const azure = require('azure-storage')
 const app = express()
 
-const PORT = 8000;
-const STORAGE_ACCOUNT_NAME = 'mmivideostreamstorage'
-const STORAGE_ACCESS_KEY = 'JvAtqthYnEwE5Itog95Z2Q/h6Dv2LsS0G6HblZ9hhaDm10PzIFGmG8x+znePP5JQlvbbq86mg3HH+AStAJwNtw=='
+const PORT = parseInt(process.env.PORT);
+const STORAGE_ACCOUNT_NAME = process.env.STORAGE_ACCOUNT_NAME
+const STORAGE_ACCESS_KEY = process.env.STORAGE_ACCESS_KEY
+
+console.log('process.env.port :', process.env.PORT)
+console.log('process.env.STORAGE_ACCOUNT_NAME', process.env.STORAGE_ACCOUNT_NAME)
+console.log('process.env.STORAGE_ACCESS_KEY', process.env.STORAGE_ACCESS_KEY)
+
+if(!process.env.PORT)
+    throw new Error("Please set the environment variable PORT...")
+
+if(!process.env.STORAGE_ACCOUNT_NAME)
+    throw new Error("Please set the environment variable STORAGE_ACCOUNT_NAME...")
+
+if(!process.env.STORAGE_ACCESS_KEY)
+    throw new Error("Please set the environment variable STORAGE_ACCESS_KEY...")
 
 function createBlobService() {
     const blobService = azure.createBlobService(
@@ -21,7 +34,7 @@ app.get('/', (req, res) => {
 
 app.get('/video', (req, res) => {
     console.log('getting video...')
-    const videoPath = 'big_buck_bunny_720p_10mb.mp4'
+    const videoPath = req.query.path
     const blobService = createBlobService()
     const containerName = 'videos'
 
